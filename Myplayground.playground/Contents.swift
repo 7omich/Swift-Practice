@@ -293,3 +293,38 @@ let stringArray = sequence.map { element in
 let filteredArray = sequence.filter { element in
     return element % 2 == 0
 }
+
+//汎用的なプログラムとジェネリクス
+
+func isEqual() -> Bool {
+    return 1 == 1
+}
+
+func isEqual(_ x: Int, _ y: Int) -> Bool {
+    return x == y
+}
+
+isEqual()
+isEqual(1, 1)
+
+//ジェネリクスを用いた記述
+func isEqual<T: Equatable>(_ x: T, _ y: T) -> Bool {
+    return x == y
+}
+
+isEqual("abc", "def")
+isEqual(1.0, 3.14)
+isEqual(false, false)
+
+//型どうしの一致を要求する型制約
+
+func concat<V: Collection, U: Collection>
+    (_ argument1: V, _ argument2: U) -> [V.Iterator.Element]
+    where V.Iterator.Element == U.Iterator.Element {
+    
+        return Array(argument1) + Array(argument2)
+}
+
+let array4 = [1, 2, 3]
+let set = Set([1, 2, 3])
+let result = concat(array4, set)
