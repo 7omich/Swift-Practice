@@ -328,3 +328,4 @@ func concat<V: Collection, U: Collection>
 let array4 = [1, 2, 3]
 let set = Set([1, 2, 3])
 let result = concat(array4, set)
+
