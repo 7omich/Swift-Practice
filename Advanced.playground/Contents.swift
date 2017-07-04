@@ -2,7 +2,7 @@ func sepBar() {
     print("---------------")
 }
 
-//参照共有を行うクラス型と構造体の比較
+// 参照共有を行うクラス型と構造体の比較
 
 protocol Target {
     var identifier: String { get set }
@@ -38,17 +38,49 @@ struct Timer {
     }
 }
 
-//構造体のターゲットを登録してタイマーを実行
+// 構造体のターゲットを登録してタイマーを実行
 let valueTypeTarget: Target = ValueTypeTarget()
 var timer1 = Timer(target: valueTypeTarget)
 timer1.start()
 valueTypeTarget.count
 
-//クラスのターゲットを登録してタイマーを実行
+// クラスのターゲットを登録してタイマーを実行
 let referenceTypeTarget = ReferenceTypeTarget()
 var timer2 = Timer(target: referenceTypeTarget)
 timer2.start()
 referenceTypeTarget.count
+
+sepBar()
+
+// デリゲートパターンの実装
+
+protocol GameDelegate : class {
+    var numberOfPlayers : Int { get }
+    func gameDidStart(_ game : Game)
+    func gameDidEnd(_ game : Game)
+}
+
+class TwoPersonsGameDelegate : GameDelegate {
+    var numberOfPlayers: Int { return 2 }
+    func gameDidStart(_ game: Game) { print("Game start") }
+    func gameDidEnd(_ game : Game) { print("Game end") }
+}
+
+class Game {
+    weak var delegate: GameDelegate?
+    
+    func start() {
+        print("Number of players is \(delegate?.numberOfPlayers ?? 1)")
+        delegate?.gameDidStart(self)
+        print("Playing")
+        delegate?.gameDidEnd(self)
+    }
+}
+
+let delegate = TwoPersonsGameDelegate()
+let twoPersonsGame = Game()
+twoPersonsGame.delegate = delegate
+twoPersonsGame.start()
 
 sepBar()
 
