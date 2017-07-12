@@ -84,3 +84,72 @@ twoPersonsGame.start()
 
 sepBar()
 
+// クロージャによるコールバックの実装
+
+class Game2 {
+    private var result = 0
+    
+    func start(completion: (Int) -> Void) {
+        print("Playing")
+        result = 42
+        completion(result)
+    }
+}
+
+let game = Game2()
+game.start { result in
+    print("Result is \(result)")
+}
+
+sepBar()
+
+// クロージャのキャプチャ
+
+import PlaygroundSupport
+import Dispatch
+
+// Playgroundでの非同期実行を待つオプション
+PlaygroundPage.current.needsIndefiniteExecution = true
+
+class SomeClass {
+    let id: Int
+    
+    init(id: Int) {
+        self.id = id
+    }
+    
+    deinit {
+        print("deinit")
+    }
+}
+
+do {
+    let object = SomeClass(id: 42)
+    let queue = DispatchQueue.main
+    
+    queue.asyncAfter(deadline: .now() + 3) {
+        print(object.id)
+    }
+}
+
+
+
+class SomeClass2 {
+    let id2: Int
+    
+    init(id2: Int) {
+        self.id2 = id2
+    }
+}
+
+let object1 = SomeClass2(id2: 42)
+let object2 = SomeClass2(id2: 43)
+
+let closure = { [weak object1, unowned object2] () -> Void in
+    print(object1)
+    print(object2)
+}
+
+closure()
+
+sepBar()
